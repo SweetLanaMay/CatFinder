@@ -8,8 +8,17 @@ const catInfo = document.querySelector('.cat-info');
 const loader = document.querySelector('.loader-text');
 const error = document.querySelector('.error');
 
+initPage()
+function initPage() {
+  fetchBreeds().then(data => {
+    renderOptions(data)
+  })
+  .catch((error) => console.log(error),
+  Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!'))
+}
+
+
 function renderOptions(data) {
-  fetchBreeds(data).then(data => {
     const markupBreeds = data
       .map(({ id, name }) => {
         return `<li><option value ='${id}'>${name}</option></li>`;
@@ -19,8 +28,8 @@ function renderOptions(data) {
     new SlimSelect({
             select: '#single'
         });
-  }).catch((error) => Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!'));
-};
+  }
+
 
 selectElement.addEventListener('change', () => {
   const selectedBreedId = selectElement.value;
@@ -30,10 +39,9 @@ selectElement.addEventListener('change', () => {
 
   fetchCatByBreed(selectedBreedId)
     .then(data => renderSelectedBreed(data))
-    .catch((error) =>
-      Notiflix.Notify.failure(
-        'Oops! Something went wrong! Try reloading the page!'
-      )
+    .catch((error) => 
+    console.log(error),
+    Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!')
     )
     .finally(() => {
       loader.classList.add('hidden');
@@ -46,11 +54,11 @@ function renderSelectedBreed(data) {
     .map(({ image, name, description, temperament }) => {
 
       return `<img class="cat_image" 
-  src ="${image[0].url}"
-  alt="${name[0]}"/>
-  <h2 class="cat_breed_title">${name[0]}</h2>
-  <p class="cat_description">${description[0]}</p>
-  <p class="cat_temperament">Temperament: ${temperament[0]}</p>
+  src ="${image.url}"
+  alt="${name}"/>
+  <h2 class="cat_breed_title">${name}</h2>
+  <p class="cat_description">${description}</p>
+  <p class="cat_temperament">Temperament: ${temperament}</p>
   `;
     })
     .join('');
