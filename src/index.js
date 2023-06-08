@@ -8,26 +8,19 @@ const catInfo = document.querySelector('.cat-info');
 const loader = document.querySelector('.loader-text');
 const error = document.querySelector('.error');
 
-function createBreedOption(breed) {
-  const option = document.createElement('option');
-  option.value = breed.id;
-  option.textContent = breed.name;
-  return option;
-}
-
-function renderOptions(breeds) {
-  const options = breeds.map(createBreedOption);
-  options.forEach(option => {
-    breedSelect.appendChild(option);
-  });
-
-  new SlimSelect({
-    select: '#single',
-    settings: {
-      placeholderText: 'Please, choose a breed',
-    },
-  });
-}
+function renderOptions(data) {
+  fetchBreeds(data).then(data => {
+    const markupBreeds = data
+      .map(({ id, name }) => {
+        return `<li><option value ='${id}'>${name}</option></li>`;
+      })
+      .join('');
+    selectElement.insertAdjacentHTML('beforeend', markupBreeds);
+    new SlimSelect({
+            select: '#single'
+        });
+  }).catch((error) => Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!'));
+};
 
 selectElement.addEventListener('change', () => {
   const selectedBreedId = selectElement.value;
@@ -36,7 +29,7 @@ selectElement.addEventListener('change', () => {
   loader.classList.remove('hidden');
 
   fetchCatByBreed(selectedBreedId)
-    .then(breeds => renderSelectedBreed(breeds))
+    .then(data => renderSelectedBreed(data))
     .catch((error) =>
       Notiflix.Notify.failure(
         'Oops! Something went wrong! Try reloading the page!'
@@ -48,23 +41,21 @@ selectElement.addEventListener('change', () => {
     });
 });
 
-function renderSelectedBreed(breeds) {
-  const markup = breeds
-    .map(breed => {
-      const { image, name, description, temperament } = breed;
-      const imageUrl = image?.[0]?.url || '';
+function renderSelectedBreed(data) {
+  const markupSelectedBreed = data[0]
+    .map(({ image, name, description, temperament }) => {
 
       return `<img class="cat_image" 
-  src ="${imageUrl}"
-  alt="${name}"/>
-  <h2 class="cat_breed_title">${name}</h2>
-  <p class="cat_description">${description}</p>
-  <p class="cat_temperament">Temperament: ${temperament}</p>
+  src ="${image[0].url}"
+  alt="${name[0]}"/>
+  <h2 class="cat_breed_title">${name[0]}</h2>
+  <p class="cat_description">${description[0]}</p>
+  <p class="cat_temperament">Temperament: ${temperament[0]}</p>
   `;
     })
     .join('');
 
-  catInfo.innerHTML = markup;
+  catInfo.innerHTML = markupSelectedBreed;
 }
 
 function showLoader() {
