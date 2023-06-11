@@ -14,12 +14,12 @@ function initPage() {
     .then(data => {
       renderOptions(data);
     })
-    .catch(
-      error => console.log(error),
+    .catch(error => {
+      console.log(error);
       Notiflix.Notify.failure(
         'Oops! Something went wrong! Try reloading the page!'
-      )
-    );
+      );
+    });
 }
 
 function renderOptions(data) {
@@ -42,12 +42,12 @@ selectElement.addEventListener('change', () => {
 
   fetchCatByBreed(selectedBreedId)
     .then(data => renderSelectedBreed(data))
-    .catch(
-      error => console.log(error),
+    .catch(error => {
+      console.log(error);
       Notiflix.Notify.failure(
         'Oops! Something went wrong! Try reloading the page!'
-      )
-    )
+      );
+    })
     .finally(() => {
       loader.classList.add('hidden');
       breedSelect.classList.remove('hidden');
@@ -56,12 +56,14 @@ selectElement.addEventListener('change', () => {
 
 const renderSelectedBreed = breed => {
   const markupSelectedBreed = `<img class="cat_image" 
-  src ="${breed.url}"
-  alt="${breed.breeds[0].name}"/>
-  <h2 class="cat_breed_title">${breed.breeds[0].name}</h2>
-  <p class="cat_description">${breed.breeds[0].description}</p>
-  <p class="cat_temperament">Temperament: ${breed.breeds[0].temperament}</p>
+  src ="${breed[0].url}"
+  width = 900px
+  height = auto
+  alt="${breed[0].breeds.name}"/>
+  <h2 class="cat_breed_title">${breed[0].breeds[0].name}</h2>
+  <p class="cat_description">${breed[0].breeds[0].description}</p>
+  <p class="cat_temperament">Temperament: ${breed[0].breeds[0].temperament}</p>
   `;
 
-  catInfo.innerHTML(markupSelectedBreed);
+  catInfo.innerHTML = markupSelectedBreed;
 };

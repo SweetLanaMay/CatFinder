@@ -8,3 +8,22 @@
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
     }
+
+    .hidden {
+        display: none;
+    }
+
+    .cat_breed_title {
+        font-size: 24px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .cat_description {
+        font-size: 16px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    .cat_temperament {
+        font-size: 16px;
+        font-weight: bold;
+    }
